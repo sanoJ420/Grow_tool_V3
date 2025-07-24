@@ -1,0 +1,1596 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>12stundenlicht Growkit Kalkulator Pro</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" sizes="192x192" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImEiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiM2NjdlZWEiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiM3NjRiYTIiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgZmlsbD0idXJsKCNhKSIvPjx0ZXh0IHg9Ijk2IiB5PSIxMDAiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI2MCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPjEyPC90ZXh0Pjx0ZXh0IHg9Ijk2IiB5PSIxMzAiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyMCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkdyb3c8L3RleHQ+PC9zdmc+">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <meta name="theme-color" content="#667eea">
+    <meta name="description" content="Professioneller Growkit Kalkulator mit 3D-Visualisierung">
+    
+    <style>
+        :root {
+            --primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --accent: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            --success: #48bb78;
+            --warning: #ed8936;
+            --error: #f56565;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Arial', sans-serif;
+            background: var(--primary);
+            min-height: 100vh;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+
+        .logo {
+            font-size: 3.5em;
+            margin-bottom: 10px;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+        }
+
+        .subtitle {
+            font-size: 1.3em;
+            opacity: 0.95;
+            margin-bottom: 30px;
+        }
+
+        .mode-selector {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .mode-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid rgba(255,255,255,0.3);
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .mode-btn.active, .mode-btn:hover {
+            background: rgba(255,255,255,0.3);
+            border-color: rgba(255,255,255,0.5);
+            transform: translateY(-2px);
+        }
+
+        .main-content {
+            display: grid;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .single-mode {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .compare-mode {
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255,255,255,0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card h2 {
+            color: #4a5568;
+            margin-bottom: 20px;
+            font-size: 1.6em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #4a5568;
+        }
+
+        select, input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        select:focus, input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .btn {
+            background: var(--primary);
+            color: white;
+            padding: 18px 35px;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--secondary);
+        }
+
+        .canvas-container {
+            width: 100%;
+            height: 400px;
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .canvas-controls {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 100;
+            display: flex;
+            gap: 5px;
+        }
+
+        .canvas-btn {
+            background: rgba(0,0,0,0.5);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .results {
+            background: var(--secondary);
+            color: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-top: 30px;
+            display: none;
+            grid-column: 1 / -1;
+        }
+
+        .results.show {
+            display: block;
+            animation: slideIn 0.6s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .result-item {
+            background: rgba(255,255,255,0.15);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .result-value {
+            font-size: 2.2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .result-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .yield-calculator {
+            grid-column: 1 / -1;
+            background: var(--accent);
+            color: white;
+        }
+
+        .yield-calculator h2 {
+            color: white;
+        }
+
+        .yield-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .yield-item {
+            background: rgba(255,255,255,0.2);
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .yield-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .ppfd-calculator {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            color: #333;
+        }
+
+        .ppfd-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .ppfd-item {
+            background: rgba(255,255,255,0.7);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .ppfd-value {
+            font-size: 1.8em;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #2d3748;
+        }
+
+        .compare-results {
+            grid-column: 1 / -1;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            display: none;
+        }
+
+        .compare-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .compare-item {
+            background: rgba(255,255,255,0.1);
+            padding: 25px;
+            border-radius: 15px;
+        }
+
+        .winner {
+            border: 3px solid #48bb78;
+            box-shadow: 0 0 20px rgba(72, 187, 120, 0.3);
+        }
+
+        .equipment-showcase {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+
+        .equipment-item {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .equipment-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .equipment-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+            background: var(--primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .price {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #e53e3e;
+            margin-top: 15px;
+        }
+
+        .brand-badge {
+            background: var(--primary);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            margin: 10px 5px;
+            display: inline-block;
+        }
+
+        .pwa-install {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--primary);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            display: none;
+            z-index: 1000;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--success);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr !important;
+            }
+            
+            .compare-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+            
+            .logo {
+                font-size: 2.5em;
+            }
+            
+            .mode-selector {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <i class="fas fa-seedling"></i> 12stundenlicht
+            </div>
+            <div class="subtitle">Professioneller Growkit Kalkulator Pro - Bremen</div>
+            <div class="mode-selector">
+                <button class="mode-btn active" data-mode="single">
+                    <i class="fas fa-calculator"></i> Einzelkalkulation
+                </button>
+                <button class="mode-btn" data-mode="compare">
+                    <i class="fas fa-balance-scale"></i> Vergleichsmodus
+                </button>
+            </div>
+        </div>
+
+        <div class="main-content single-mode" id="mainContent">
+            <div class="card">
+                <h2><i class="fas fa-cogs"></i> Setup 1 Konfigurator</h2>
+                <form id="growForm1">
+                    <div class="form-group">
+                        <label for="tentSize1">Growzelt:</label>
+                        <select id="tentSize1" required>
+                            <option value="">Wähle Zeltgröße</option>
+                            <option value="60x60">Secret Jardin DS60 (60x60x140cm) - 159€</option>
+                            <option value="80x80">Secret Jardin DS80 (80x80x160cm) - 189€</option>
+                            <option value="100x100">Secret Jardin DS100 (100x100x200cm) - 229€</option>
+                            <option value="120x120">Secret Jardin DS120 (120x120x200cm) - 279€</option>
+                            <option value="150x150">Secret Jardin DS150 (150x150x200cm) - 339€</option>
+                            <option value="240x120">Secret Jardin DS240 (240x120x200cm) - 449€</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lightType1">LED Beleuchtung:</label>
+                        <select id="lightType1" required>
+                            <option value="">Wähle LED Lampe</option>
+                            <option value="sanlight100">SANlight EVO 3-60 (100W) - 249€</option>
+                            <option value="sanlight150">SANlight EVO 4-80 (150W) - 349€</option>
+                            <option value="sanlight200">SANlight EVO 5-100 (200W) - 449€</option>
+                            <option value="lumatek240">Lumatek Zeus 240W Pro - 329€</option>
+                            <option value="lumatek465">Lumatek Zeus 465W Pro - 549€</option>
+                            <option value="lumatek600">Lumatek Zeus 600W Pro - 649€</option>
+                            <option value="spider300">Mars Hydro FC-E3000 (300W) - 279€</option>
+                            <option value="spider450">Mars Hydro FC-E4800 (450W) - 399€</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fanType1">Abluftventilator:</label>
+                        <select id="fanType1" required>
+                            <option value="">Wähle Abluftventilator</option>
+                            <option value="primaklima100">Prima Klima PK100 (100mm, 160m³/h) - 89€</option>
+                            <option value="primaklima125">Prima Klima PK125 (125mm, 220m³/h) - 109€</option>
+                            <option value="primaklima150">Prima Klima PK150 (150mm, 280m³/h) - 129€</option>
+                            <option value="ruck100">RVK 100mm (145m³/h) - 119€</option>
+                            <option value="ruck125">RVK 125mm (220m³/h) - 149€</option>
+                            <option value="ruck150">RVK 150mm (315m³/h) - 189€</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="filter1">Aktivkohlefilter:</label>
+                        <select id="filter1" required>
+                            <option value="">Wähle Filter</option>
+                            <option value="phresh100">Phresh Filter 100x300mm - 69€</option>
+                            <option value="phresh125">Phresh Filter 125x400mm - 89€</option>
+                            <option value="phresh150">Phresh Filter 150x500mm - 109€</option>
+                            <option value="mountain100">Mountain Air 100x300mm - 79€</option>
+                            <option value="mountain125">Mountain Air 125x400mm - 99€</option>
+                            <option value="mountain150">Mountain Air 150x500mm - 119€</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="circulationFan1">Umluftventilator:</label>
+                        <select id="circulationFan1" required>
+                            <option value="">Wähle Umluftventilator</option>
+                            <option value="monkey15">Monkey Fan 15cm - 39€</option>
+                            <option value="monkey20">Monkey Fan 20cm - 49€</option>
+                            <option value="clip15">Clip Ventilator 15cm - 29€</option>
+                            <option value="clip20">Clip Ventilator 20cm - 35€</option>
+                            <option value="tower30">Tower Fan 30cm - 69€</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="plantHeight1">Pflanzenhöhe (cm):</label>
+                        <input type="number" id="plantHeight1" min="20" max="180" value="60" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="plantCount1">Anzahl Pflanzen:</label>
+                        <input type="number" id="plantCount1" min="1" max="20" value="4" required>
+                    </div>
+
+                    <button type="submit" class="btn">
+                        <i class="fas fa-magic"></i> Berechnen
+                    </button>
+                </form>
+            </div>
+
+            <div class="card" id="setup2Card" style="display: none;">
+                <h2><i class="fas fa-cogs"></i> Setup 2 Konfigurator</h2>
+                <form id="growForm2">
+                    <div class="form-group">
+                        <label for="tentSize2">Growzelt:</label>
+                        <select id="tentSize2" required>
+                            <option value="">Wähle Zeltgröße</option>
+                            <option value="60x60">Secret Jardin DS60 (60x60x140cm) - 159€</option>
+                            <option value="80x80">Secret Jardin DS80 (80x80x160cm) - 189€</option>
+                            <option value="100x100">Secret Jardin DS100 (100x100x200cm) - 229€</option>
+                            <option value="120x120">Secret Jardin DS120 (120x120x200cm) - 279€</option>
+                            <option value="150x150">Secret Jardin DS150 (150x150x200cm) - 339€</option>
+                            <option value="240x120">Secret Jardin DS240 (240x120x200cm) - 449€</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lightType2">LED Beleuchtung:</label>
+                        <select id="lightType2" required>
+                            <option value="">Wähle LED Lampe</option>
+                            <option value="sanlight100">SANlight EVO 3-60 (100W) - 249€</option>
+                            <option value="sanlight150">SANlight EVO 4-80 (150W) - 349€</option>
+                            <option value="sanlight200">SANlight EVO 5-100 (200W) - 449€</option>
+                            <option value="lumatek240">Lumatek Zeus 240W Pro - 329€</option>
+                            <option value="lumatek465">Lumatek Zeus 465W Pro - 549€</option>
+                            <option value="lumatek600">Lumatek Zeus 600W Pro - 649€</option>
+                            <option value="spider300">Mars Hydro FC-E3000 (300W) - 279€</option>
+                            <option value="spider450">Mars Hydro FC-E4800 (450W) - 399€</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fanType2">Abluftventilator:</label>
+                        <select id="fanType2" required>
+                            <option value="">Wähle Abluftventilator</option>
+                            <option value="primaklima100">Prima Klima PK100 (100mm, 160m³/h) - 89€</option>
+                            <option value="primaklima125">Prima Klima PK125 (125mm, 220m³/h) - 109€</option>
+                            <option value="primaklima150">Prima Klima PK150 (150mm, 280m³/h) - 129€</option>
+                            <option value="ruck100">RVK 100mm (145m³/h) - 119€</option>
+                            <option value="ruck125">RVK 125mm (220m³/h) - 149€</option>
+                            <option value="ruck150">RVK 150mm (315m³/h) - 189€</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="filter2">Aktivkohlefilter:</label>
+                        <select id="filter2" required>
+                            <option value="">Wähle Filter</option>
+                            <option value="phresh100">Phresh Filter 100x300mm - 69€</option>
+                            <option value="phresh125">Phresh Filter 125x400mm - 89€</option>
+                            <option value="phresh150">Phresh Filter 150x500mm - 109€</option>
+                            <option value="mountain100">Mountain Air 100x300mm - 79€</option>
+                            <option value="mountain125">Mountain Air 125x400mm - 99€</option>
+                            <option value="mountain150">Mountain Air 150x500mm - 119€</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="circulationFan2">Umluftventilator:</label>
+                        <select id="circulationFan2" required>
+                            <option value="">Wähle Umluftventilator</option>
+                            <option value="monkey15">Monkey Fan 15cm - 39€</option>
+                            <option value="monkey20">Monkey Fan 20cm - 49€</option>
+                            <option value="clip15">Clip Ventilator 15cm - 29€</option>
+                            <option value="clip20">Clip Ventilator 20cm - 35€</option>
+                            <option value="tower30">Tower Fan 30cm - 69€</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="plantHeight2">Pflanzenhöhe (cm):</label>
+                        <input type="number" id="plantHeight2" min="20" max="180" value="60" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="plantCount2">Anzahl Pflanzen:</label>
+                        <input type="number" id="plantCount2" min="1" max="20" value="4" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-secondary">
+                        <i class="fas fa-magic"></i> Berechnen
+                    </button>
+                </form>
+            </div>
+
+            <div class="card">
+                <h2><i class="fas fa-cube"></i> 3D Growzelt Visualisierung</h2>
+                <div class="canvas-container">
+                    <div id="threejs-container"></div>
+                    <div class="canvas-controls">
+                        <button class="canvas-btn" onclick="resetCamera()">
+                            <i class="fas fa-home"></i>
+                        </button>
+                        <button class="canvas-btn" onclick="toggleAnimation()">
+                            <i class="fas fa-play"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card ppfd-calculator">
+                <h2><i class="fas fa-lightbulb"></i> PPFD Lichtstärke</h2>
+                <div class="ppfd-grid">
+                    <div class="ppfd-item">
+                        <div class="ppfd-value" id="ppfd90">-</div>
+                        <div>90cm Abstand</div>
+                    </div>
+                    <div class="ppfd-item">
+                        <div class="ppfd-value" id="ppfdPlant">-</div>
+                        <div>Pflanzenhöhe</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card yield-calculator">
+                <h2><i class="fas fa-chart-line"></i> Ertragskalkulator</h2>
+                <div class="yield-grid">
+                    <div class="yield-item">
+                        <div class="yield-value" id="yieldMin">-</div>
+                        <div>Min. Ertrag (g)</div>
+                    </div>
+                    <div class="yield-item">
+                        <div class="yield-value" id="yieldAvg">-</div>
+                        <div>Ø Ertrag (g)</div>
+                    </div>
+                    <div class="yield-item">
+                        <div class="yield-value" id="yieldMax">-</div>
+                        <div>Max. Ertrag (g)</div>
+                    </div>
+                    <div class="yield-item">
+                        <div class="yield-value" id="yieldPerWatt">-</div>
+                        <div>g/Watt Effizienz</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="results" id="results">
+            <h2><i class="fas fa-chart-pie"></i> Setup Ergebnis</h2>
+            <div class="result-grid" id="resultContent"></div>
+        </div>
+
+        <div class="card compare-results" id="compareResults">
+            <h2><i class="fas fa-trophy"></i> Setup Vergleich</h2>
+            <div class="compare-grid" id="compareContent"></div>
+        </div>
+
+        <div class="equipment-showcase">
+            <div class="equipment-item">
+                <div class="equipment-icon"><i class="fas fa-home"></i></div>
+                <h3>Secret Jardin Growzelte</h3>
+                <div class="brand-badge">Premium Qualität</div>
+                <p>Hochwertige Growzelte mit Mylar-Reflektion und stabiler Konstruktion. Perfekt für den Indoor-Anbau.</p>
+                <div class="price">ab 159€</div>
+            </div>
+            <div class="equipment-item">
+                <div class="equipment-icon"><i class="fas fa-lightbulb"></i></div>
+                <h3>SANlight & Lumatek LED</h3>
+                <div class="brand-badge">Top Effizienz</div>
+                <p>Modernste LED-Technologie mit Samsung LM301B/H Dioden und höchster Lichtausbeute für maximalen Ertrag.</p>
+                <div class="price">ab 249€</div>
+            </div>
+            <div class="equipment-item">
+                <div class="equipment-icon"><i class="fas fa-fan"></i></div>
+                <h3>Prima Klima Lüfter</h3>
+                <div class="brand-badge">Leise & Stark</div>
+                <p>Professionelle Abluftventilatoren mit EC-Motor. Energieeffizient und extrem leise im Betrieb.</p>
+                <div class="price">ab 89€</div>
+            </div>
+            <div class="equipment-item">
+                <div class="equipment-icon"><i class="fas fa-filter"></i></div>
+                <h3>Phresh Aktivkohlefilter</h3>
+                <div class="brand-badge">Geruchsfrei</div>
+                <p>Hochwertige Aktivkohlefilter für 100% Geruchsneutralisation. Australische Virgin Coal Aktivkohle.</p>
+                <div class="price">ab 69€</div>
+            </div>
+        </div>
+    </div>
+
+    <button class="pwa-install" id="pwaInstall">
+        <i class="fas fa-download"></i> App installieren
+    </button>
+
+    <div class="notification" id="notification">
+        <i class="fas fa-check"></i> <span id="notificationText">Berechnung abgeschlossen!</span>
+    </div>
+
+    <script>
+        // Produktdatenbank mit realistischen 12stundenlicht.de Produkten
+        const growData = {
+            tents: {
+                '60x60': { price: 159, area: 0.36, volume: 0.504, width: 60, height: 140, brand: 'Secret Jardin DS60' },
+                '80x80': { price: 189, area: 0.64, volume: 0.8192, width: 80, height: 160, brand: 'Secret Jardin DS80' },
+                '100x100': { price: 229, area: 1.0, volume: 2.0, width: 100, height: 200, brand: 'Secret Jardin DS100' },
+                '120x120': { price: 279, area: 1.44, volume: 2.88, width: 120, height: 200, brand: 'Secret Jardin DS120' },
+                '150x150': { price: 339, area: 2.25, volume: 4.5, width: 150, height: 200, brand: 'Secret Jardin DS150' },
+                '240x120': { price: 449, area: 2.88, volume: 5.76, width: 240, height: 200, brand: 'Secret Jardin DS240' }
+            },
+            lights: {
+                'sanlight100': { price: 249, watt: 100, brand: 'SANlight EVO 3-60', ppfd: { 30: 850, 60: 425, 90: 280 }, efficiency: 2.8 },
+                'sanlight150': { price: 349, watt: 150, brand: 'SANlight EVO 4-80', ppfd: { 30: 1100, 60: 550, 90: 365 }, efficiency: 2.9 },
+                'sanlight200': { price: 449, watt: 200, brand: 'SANlight EVO 5-100', ppfd: { 30: 1350, 60: 675, 90: 445 }, efficiency: 3.0 },
+                'lumatek240': { price: 329, watt: 240, brand: 'Lumatek Zeus 240W Pro', ppfd: { 30: 1400, 60: 700, 90: 465 }, efficiency: 2.7 },
+                'lumatek465': { price: 549, watt: 465, brand: 'Lumatek Zeus 465W Pro', ppfd: { 30: 2200, 60: 1100, 90: 730 }, efficiency: 2.8 },
+                'lumatek600': { price: 649, watt: 600, brand: 'Lumatek Zeus 600W Pro', ppfd: { 30: 2600, 60: 1300, 90: 865 }, efficiency: 2.9 },
+                'spider300': { price: 279, watt: 300, brand: 'Mars Hydro FC-E3000', ppfd: { 30: 1500, 60: 750, 90: 500 }, efficiency: 2.5 },
+                'spider450': { price: 399, watt: 450, brand: 'Mars Hydro FC-E4800', ppfd: { 30: 2000, 60: 1000, 90: 665 }, efficiency: 2.6 }
+            },
+            fans: {
+                'primaklima100': { price: 89, size: '100mm', capacity: 160, brand: 'Prima Klima PK100' },
+                'primaklima125': { price: 109, size: '125mm', capacity: 220, brand: 'Prima Klima PK125' },
+                'primaklima150': { price: 129, size: '150mm', capacity: 280, brand: 'Prima Klima PK150' },
+                'ruck100': { price: 119, size: '100mm', capacity: 145, brand: 'RVK 100mm' },
+                'ruck125': { price: 149, size: '125mm', capacity: 220, brand: 'RVK 125mm' },
+                'ruck150': { price: 189, size: '150mm', capacity: 315, brand: 'RVK 150mm' }
+            },
+            filters: {
+                'phresh100': { price: 69, size: '100x300mm', brand: 'Phresh Filter' },
+                'phresh125': { price: 89, size: '125x400mm', brand: 'Phresh Filter' },
+                'phresh150': { price: 109, size: '150x500mm', brand: 'Phresh Filter' },
+                'mountain100': { price: 79, size: '100x300mm', brand: 'Mountain Air' },
+                'mountain125': { price: 99, size: '125x400mm', brand: 'Mountain Air' },
+                'mountain150': { price: 119, size: '150x500mm', brand: 'Mountain Air' }
+            },
+            circulation: {
+                'monkey15': { price: 39, size: '15cm', brand: 'Monkey Fan' },
+                'monkey20': { price: 49, size: '20cm', brand: 'Monkey Fan' },
+                'clip15': { price: 29, size: '15cm', brand: 'Clip Ventilator' },
+                'clip20': { price: 35, size: '20cm', brand: 'Clip Ventilator' },
+                'tower30': { price: 69, size: '30cm', brand: 'Tower Fan' }
+            }
+        };
+
+        // 3D Scene Setup
+        let scene, camera, renderer, tent, light, controls;
+        let animationId;
+        let isAnimating = false;
+
+        function init3D() {
+            const container = document.getElementById('threejs-container');
+            const width = container.clientWidth;
+            const height = container.clientHeight;
+
+            // Scene
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0xf0f0f0);
+
+            // Camera
+            camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+            camera.position.set(5, 5, 5);
+
+            // Renderer
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(width, height);
+            renderer.shadowMap.enabled = true;
+            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+            container.appendChild(renderer.domElement);
+
+            // Lighting
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+            scene.add(ambientLight);
+
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight.position.set(10, 10, 5);
+            directionalLight.castShadow = true;
+            scene.add(directionalLight);
+
+            // Create initial tent
+            createTent(100, 100, 200);
+
+            // Mouse controls
+            addMouseControls();
+
+            // Start render loop
+            animate();
+
+            // Handle resize
+            window.addEventListener('resize', onWindowResize);
+        }
+
+        function createTent(width, depth, height) {
+            // Clear existing tent
+            if (tent) scene.remove(tent);
+            if (light) scene.remove(light);
+
+            tent = new THREE.Group();
+
+            // Tent frame
+            const frameGeometry = new THREE.BoxGeometry(width/100, depth/100, height/100);
+            const frameMaterial = new THREE.MeshPhongMaterial({ 
+                color: 0x333333, 
+                transparent: true, 
+                opacity: 0.1,
+                wireframe: false 
+            });
+            const frame = new THREE.Mesh(frameGeometry, frameMaterial);
+            frame.position.y = height/200;
+            tent.add(frame);
+
+            // Tent walls (wireframe)
+            const wallGeometry = new THREE.BoxGeometry(width/100, depth/100, height/100);
+            const wallMaterial = new THREE.MeshBasicMaterial({ 
+                color: 0x666666, 
+                wireframe: true,
+                transparent: true,
+                opacity: 0.3
+            });
+            const walls = new THREE.Mesh(wallGeometry, wallMaterial);
+            walls.position.y = height/200;
+            tent.add(walls);
+
+            // Floor
+            const floorGeometry = new THREE.PlaneGeometry(width/100, depth/100);
+            const floorMaterial = new THREE.MeshPhongMaterial({ color: 0x444444 });
+            const floor = new THREE.Mesh(floorGeometry, floorMaterial);
+            floor.rotation.x = -Math.PI / 2;
+            floor.receiveShadow = true;
+            tent.add(floor);
+
+            // LED Light
+            const lightGeometry = new THREE.BoxGeometry(0.8, 0.05, 0.4);
+            const lightMaterial = new THREE.MeshPhongMaterial({ 
+                color: 0xffdd44,
+                emissive: 0x444400 
+            });
+            light = new THREE.Mesh(lightGeometry, lightMaterial);
+            light.position.y = height/100 - 0.3;
+            light.castShadow = true;
+
+            // LED light effect
+            const ledLight = new THREE.PointLight(0xffdd44, 1, 10);
+            ledLight.position.copy(light.position);
+            ledLight.castShadow = true;
+            tent.add(ledLight);
+            tent.add(light);
+
+            // Plants
+            for (let i = 0; i < 4; i++) {
+                const plantGeometry = new THREE.ConeGeometry(0.1, 0.6, 8);
+                const plantMaterial = new THREE.MeshPhongMaterial({ color: 0x228833 });
+                const plant = new THREE.Mesh(plantGeometry, plantMaterial);
+                
+                const x = (i % 2 - 0.5) * width/150;
+                const z = (Math.floor(i / 2) - 0.5) * depth/150;
+                plant.position.set(x, 0.3, z);
+                plant.castShadow = true;
+                tent.add(plant);
+            }
+
+            scene.add(tent);
+        }
+
+        function addMouseControls() {
+            let mouseDown = false;
+            let mouseX = 0;
+            let mouseY = 0;
+
+            const container = document.getElementById('threejs-container');
+            if (!container) return;
+
+            container.addEventListener('mousedown', (event) => {
+                mouseDown = true;
+                mouseX = event.clientX;
+                mouseY = event.clientY;
+            });
+
+            container.addEventListener('mouseup', () => {
+                mouseDown = false;
+            });
+
+            container.addEventListener('mousemove', (event) => {
+                if (!mouseDown || !tent) return;
+
+                const deltaX = event.clientX - mouseX;
+                const deltaY = event.clientY - mouseY;
+
+                tent.rotation.y += deltaX * 0.01;
+                tent.rotation.x += deltaY * 0.01;
+
+                mouseX = event.clientX;
+                mouseY = event.clientY;
+            });
+
+            container.addEventListener('wheel', (event) => {
+                const scale = event.deltaY > 0 ? 1.1 : 0.9;
+                camera.position.multiplyScalar(scale);
+                camera.position.clampLength(2, 20);
+            });
+        }
+
+        function animate() {
+            animationId = requestAnimationFrame(animate);
+            
+            if (isAnimating && tent) {
+                tent.rotation.y += 0.005;
+            }
+            
+            renderer.render(scene, camera);
+        }
+
+        function resetCamera() {
+            if (!camera || !tent) return;
+            camera.position.set(5, 5, 5);
+            camera.lookAt(0, 0, 0);
+            tent.rotation.set(0, 0, 0);
+        }
+
+        function toggleAnimation() {
+            isAnimating = !isAnimating;
+            const btn = document.querySelector('.canvas-controls .canvas-btn:last-child i');
+            if (btn) {
+                btn.className = isAnimating ? 'fas fa-pause' : 'fas fa-play';
+            }
+        }
+
+        function onWindowResize() {
+            const container = document.getElementById('threejs-container');
+            const width = container.clientWidth;
+            const height = container.clientHeight;
+
+            camera.aspect = width / height;
+            camera.updateProjectionMatrix();
+            renderer.setSize(width, height);
+        }
+
+        // Calculation Functions
+        function calculatePPFD(lightType, distance) {
+            if (!growData.lights[lightType]) return 0;
+            
+            const light = growData.lights[lightType];
+            const basePPFD = light.ppfd[30] || 0;
+            
+            // Inverse square law with realistic adjustment
+            const ratio = Math.pow(30 / distance, 1.8);
+            return Math.round(basePPFD * ratio * 0.9); // 10% loss for reflector efficiency
+        }
+
+        function calculateYield(lightWatt, plantCount, tentArea, ppfdAtPlant) {
+            // Yield calculation based on light efficiency and PPFD
+            const baseYieldPerWatt = 1.2; // g/W baseline
+            const ppfdFactor = Math.min(ppfdAtPlant / 600, 2.0); // Optimal at 600 PPFD
+            const spaceFactor = Math.min(tentArea / (plantCount * 0.25), 1.5); // 0.25m² per plant optimal
+            
+            const avgYield = lightWatt * baseYieldPerWatt * ppfdFactor * spaceFactor;
+            const minYield = Math.round(avgYield * 0.7);
+            const maxYield = Math.round(avgYield * 1.4);
+            
+            return {
+                min: minYield,
+                avg: Math.round(avgYield),
+                max: maxYield,
+                perWatt: Math.round((avgYield / lightWatt) * 10) / 10
+            };
+        }
+
+        function updatePPFDDisplay(lightType, plantHeight) {
+            const ppfd30 = calculatePPFD(lightType, 30);
+            const ppfd60 = calculatePPFD(lightType, 60);
+            const ppfd90 = calculatePPFD(lightType, 90);
+            const ppfdPlant = calculatePPFD(lightType, plantHeight);
+
+            document.getElementById('ppfd30').textContent = ppfd30;
+            document.getElementById('ppfd60').textContent = ppfd60;
+            document.getElementById('ppfd90').textContent = ppfd90;
+            document.getElementById('ppfdPlant').textContent = ppfdPlant;
+        }
+
+        function updateYieldDisplay(lightType, plantCount, tentArea, plantHeight) {
+            const light = growData.lights[lightType];
+            if (!light) {
+                ['yieldMin', 'yieldAvg', 'yieldMax', 'yieldPerWatt'].forEach(id => {
+                    document.getElementById(id).textContent = '-';
+                });
+                return;
+            }
+
+            const ppfdAtPlant = calculatePPFD(lightType, plantHeight);
+            const yield = calculateYield(light.watt, plantCount, tentArea, ppfdAtPlant);
+
+            document.getElementById('yieldMin').textContent = yield.min;
+            document.getElementById('yieldAvg').textContent = yield.avg;
+            document.getElementById('yieldMax').textContent = yield.max;
+            document.getElementById('yieldPerWatt').textContent = yield.perWatt;
+        }
+
+        // Add touch support for mobile
+        let touchStartX, touchStartY;
+
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            const text = document.getElementById('notificationText');
+            
+            if (!notification || !text) return;
+            
+            text.textContent = message;
+            notification.className = `notification show ${type}`;
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Mode switching
+        document.querySelectorAll('.mode-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                const mode = this.dataset.mode;
+                const mainContent = document.getElementById('mainContent');
+                const setup2Card = document.getElementById('setup2Card');
+                const compareResults = document.getElementById('compareResults');
+                
+                if (mode === 'compare') {
+                    mainContent.className = 'main-content compare-mode';
+                    setup2Card.style.display = 'block';
+                    compareResults.style.display = 'block';
+                } else {
+                    mainContent.className = 'main-content single-mode';
+                    setup2Card.style.display = 'none';
+                    compareResults.style.display = 'none';
+                }
+            });
+        });
+
+        // Event listeners for live updates
+        ['lightType1', 'plantHeight1', 'plantCount1', 'tentSize1'].forEach(id => {
+            const element = document.getElementById(id);
+            if (element) {
+                element.addEventListener('change', updateLiveCalculations);
+                element.addEventListener('input', updateLiveCalculations);
+            }
+        });
+
+        function updateLiveCalculations() {
+            const lightType = document.getElementById('lightType1').value;
+            const plantHeight = parseInt(document.getElementById('plantHeight1').value) || 60;
+            const plantCount = parseInt(document.getElementById('plantCount1').value) || 4;
+            const tentSize = document.getElementById('tentSize1').value;
+            
+            if (lightType) {
+                updatePPFDDisplay(lightType, plantHeight);
+                
+                if (tentSize) {
+                    const tent = growData.tents[tentSize];
+                    updateYieldDisplay(lightType, plantCount, tent.area, plantHeight);
+                    
+                    // Update 3D visualization
+                    createTent(tent.width, tent.width, tent.height);
+                }
+            }
+        }
+
+        // Form submission handlers
+        document.getElementById('growForm1').addEventListener('submit', function(e) {
+            e.preventDefault();
+            calculateSetup(1);
+        });
+
+        document.getElementById('growForm2').addEventListener('submit', function(e) {
+            e.preventDefault();
+            calculateSetup(2);
+        });
+
+        function calculateSetup(setupNum) {
+            const tentSize = document.getElementById(`tentSize${setupNum}`).value;
+            const lightType = document.getElementById(`lightType${setupNum}`).value;
+            const fanType = document.getElementById(`fanType${setupNum}`).value;
+            const filter = document.getElementById(`filter${setupNum}`).value;
+            const circulationFan = document.getElementById(`circulationFan${setupNum}`).value;
+            const plantHeight = parseInt(document.getElementById(`plantHeight${setupNum}`).value) || 60;
+            const plantCount = parseInt(document.getElementById(`plantCount${setupNum}`).value) || 4;
+
+            if (!tentSize || !lightType || !fanType || !filter || !circulationFan) {
+                showNotification('Bitte alle Felder ausfüllen!', 'error');
+                return;
+            }
+
+            const tent = growData.tents[tentSize];
+            const light = growData.lights[lightType];
+            const fan = growData.fans[fanType];
+            const filterData = growData.filters[filter];
+            const circulation = growData.circulation[circulationFan];
+
+            const totalPrice = tent.price + light.price + fan.price + filterData.price + circulation.price;
+            const powerConsumption = light.watt + 25; // Add fan consumption
+            const monthlyElectricity = Math.round(powerConsumption * 12 * 30 * 0.32 / 1000); // 32 cent/kWh
+            const ppfdAtPlantHeight = calculatePPFD(lightType, plantHeight);
+            const yield = calculateYield(light.watt, plantCount, tent.area, ppfdAtPlantHeight);
+            
+            let recommendation = '';
+            let recommendationClass = '';
+            if (ppfdAtPlantHeight < 300) {
+                recommendation = '⚠️ Zu wenig Licht für optimales Wachstum';
+                recommendationClass = 'warning';
+            } else if (ppfdAtPlantHeight < 600) {
+                recommendation = '✅ Gut für Wachstumsphase';
+                recommendationClass = 'success';
+            } else if (ppfdAtPlantHeight < 1000) {
+                recommendation = '🌟 Perfekt für Blütephase';
+                recommendationClass = 'success';
+            } else {
+                recommendation = '⚡ Sehr hohe Lichtintensität - Vorsicht!';
+                recommendationClass = 'warning';
+            }
+
+            const resultContent = `
+                <div class="result-item">
+                    <div class="result-value">${totalPrice}€</div>
+                    <div class="result-label">Gesamtpreis</div>
+                </div>
+                <div class="result-item">
+                    <div class="result-value">${powerConsumption}W</div>
+                    <div class="result-label">Stromverbrauch</div>
+                </div>
+                <div class="result-item">
+                    <div class="result-value">${monthlyElectricity}€</div>
+                    <div class="result-label">Monatl. Stromkosten</div>
+                </div>
+                <div class="result-item">
+                    <div class="result-value">${ppfdAtPlantHeight}</div>
+                    <div class="result-label">PPFD μmol/m²/s</div>
+                </div>
+                <div class="result-item">
+                    <div class="result-value">${yield.avg}g</div>
+                    <div class="result-label">Erwarteter Ertrag</div>
+                </div>
+                <div class="result-item">
+                    <div class="result-value">${yield.perWatt}</div>
+                    <div class="result-label">Effizienz g/W</div>
+                </div>
+                <div class="result-item" style="grid-column: 1/-1;">
+                    <div class="result-value ${recommendationClass}">${recommendation}</div>
+                    <div class="result-label">Bewertung</div>
+                </div>
+            `;
+
+            if (setupNum === 1) {
+                document.getElementById('resultContent').innerHTML = resultContent;
+                document.getElementById('results').classList.add('show');
+                showNotification('Setup 1 berechnet!');
+            }
+
+            // Store results for comparison
+            window[`setup${setupNum}Results`] = {
+                totalPrice,
+                powerConsumption,
+                monthlyElectricity,
+                ppfdAtPlantHeight,
+                yield,
+                recommendation,
+                tent: tent.brand,
+                light: light.brand
+            };
+
+            // Update comparison if both setups are calculated
+            if (window.setup1Results && window.setup2Results) {
+                updateComparison();
+            }
+        }
+
+        function updateComparison() {
+            const setup1 = window.setup1Results;
+            const setup2 = window.setup2Results;
+            
+            const compareContent = document.getElementById('compareContent');
+            
+            // Determine winners
+            const priceWinner = setup1.totalPrice < setup2.totalPrice ? 1 : 2;
+            const efficiencyWinner = setup1.yield.perWatt > setup2.yield.perWatt ? 1 : 2;
+            const yieldWinner = setup1.yield.avg > setup2.yield.avg ? 1 : 2;
+            
+            compareContent.innerHTML = `
+                <div class="compare-item ${priceWinner === 1 ? 'winner' : ''}">
+                    <h3>🔧 Setup 1</h3>
+                    <p><strong>Zelt:</strong> ${setup1.tent}</p>
+                    <p><strong>Licht:</strong> ${setup1.light}</p>
+                    <p><strong>Preis:</strong> ${setup1.totalPrice}€</p>
+                    <p><strong>Ertrag:</strong> ${setup1.yield.avg}g</p>
+                    <p><strong>Effizienz:</strong> ${setup1.yield.perWatt} g/W</p>
+                    <p><strong>PPFD:</strong> ${setup1.ppfdAtPlantHeight}</p>
+                </div>
+                
+                <div class="compare-item ${priceWinner === 2 ? 'winner' : ''}">
+                    <h3>⚙️ Setup 2</h3>
+                    <p><strong>Zelt:</strong> ${setup2.tent}</p>
+                    <p><strong>Licht:</strong> ${setup2.light}</p>
+                    <p><strong>Preis:</strong> ${setup2.totalPrice}€</p>
+                    <p><strong>Ertrag:</strong> ${setup2.yield.avg}g</p>
+                    <p><strong>Effizienz:</strong> ${setup2.yield.perWatt} g/W</p>
+                    <p><strong>PPFD:</strong> ${setup2.ppfdAtPlantHeight}</p>
+                </div>
+            `;
+            
+            showNotification('Vergleich aktualisiert!');
+        }
+
+        // PWA Service Worker Registration
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(registration => console.log('SW registered'))
+                    .catch(error => console.log('SW registration failed'));
+            });
+        }
+
+        // PWA Install Prompt
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            document.getElementById('pwaInstall').style.display = 'block';
+        });
+
+        document.getElementById('pwaInstall').addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    showNotification('App wurde installiert!');
+                }
+                deferredPrompt = null;
+                document.getElementById('pwaInstall').style.display = 'none';
+            }
+        });
+
+        // Initialize 3D scene when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(init3D, 100); // Small delay to ensure container is rendered
+        });
+
+        function addTouchSupport() {
+            const container = document.getElementById('threejs-container');
+            if (!container) return;
+            
+            container.addEventListener('touchstart', (e) => {
+                if (e.touches.length === 1) {
+                    touchStartX = e.touches[0].clientX;
+                    touchStartY = e.touches[0].clientY;
+                }
+            });
+
+            container.addEventListener('touchmove', (e) => {
+                e.preventDefault();
+                if (e.touches.length === 1 && tent) {
+                    const deltaX = e.touches[0].clientX - touchStartX;
+                    const deltaY = e.touches[0].clientY - touchStartY;
+
+                    tent.rotation.y += deltaX * 0.01;
+                    tent.rotation.x += deltaY * 0.01;
+
+                    touchStartX = e.touches[0].clientX;
+                    touchStartY = e.touches[0].clientY;
+                }
+            });
+
+            container.addEventListener('touchend', (e) => {
+                e.preventDefault();
+            });
+        }
+
+        // PWA Manifest
+        const manifest = {
+            name: "12stundenlicht Growkit Kalkulator Pro",
+            short_name: "12stunden Grow",
+            description: "Professioneller Growkit Kalkulator mit 3D-Visualisierung",
+            start_url: "/",
+            display: "standalone",
+            background_color: "#667eea",
+            theme_color: "#667eea",
+            orientation: "portrait-primary",
+            icons: [
+                {
+                    src: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImEiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiM2NjdlZWEiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiM3NjRiYTIiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgZmlsbD0idXJsKCNhKSIvPjx0ZXh0IHg9Ijk2IiB5PSIxMDAiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI2MCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPjEyPC90ZXh0Pjx0ZXh0IHg9Ijk2IiB5PSIxMzAiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyMCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkdyb3c8L3RleHQ+PC9zdmc+",
+                    sizes: "192x192",
+                    type: "image/svg+xml"
+                },
+                {
+                    src: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImEiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiM2NjdlZWEiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiM3NjRiYTIiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgZmlsbD0idXJsKCNhKSIvPjx0ZXh0IHg9IjI1NiIgeT0iMjgwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTYwIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+MTI8L3RleHQ+PHRleHQgeD0iMjU2IiB5PSIzNDAiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI1MCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkdyb3c8L3RleHQ+PC9zdmc+",
+                    sizes: "512x512",
+                    type: "image/svg+xml"
+                }
+            ]
+        };
+
+        // Create manifest.json dynamically
+        const manifestBlob = new Blob([JSON.stringify(manifest)], {type: 'application/json'});
+        const manifestURL = URL.createObjectURL(manifestBlob);
+        document.querySelector('link[rel="manifest"]').href = manifestURL;
+
+        // Service Worker
+        const swCode = `
+        const CACHE_NAME = '12stundenlicht-growkit-v1';
+        const urlsToCache = [
+            '/',
+            '/style.css',
+            '/script.js',
+            'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
+            'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js'
+        ];
+
+        self.addEventListener('install', (event) => {
+            event.waitUntil(
+                caches.open(CACHE_NAME)
+                    .then((cache) => cache.addAll(urlsToCache))
+            );
+        });
+
+        self.addEventListener('fetch', (event) => {
+            event.respondWith(
+                caches.match(event.request)
+                    .then((response) => {
+                        return response || fetch(event.request);
+                    }
+                )
+            );
+        });
+        `;
+
+        // Register service worker with inline code
+        if ('serviceWorker' in navigator) {
+            const swBlob = new Blob([swCode], {type: 'application/javascript'});
+            const swURL = URL.createObjectURL(swBlob);
+            
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register(swURL)
+                    .then(registration => {
+                        console.log('ServiceWorker registration successful');
+                        showNotification('App ist offline verfügbar!');
+                    })
+                    .catch(error => {
+                        console.log('ServiceWorker registration failed');
+                    });
+            });
+        }
+
+        // Enhanced mobile experience
+        function optimizeForMobile() {
+            const isMobile = window.innerWidth <= 768;
+            
+            if (isMobile) {
+                // Reduce 3D quality on mobile
+                if (renderer) {
+                    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+                }
+                
+                // Simplify animations
+                const style = document.createElement('style');
+                style.textContent = `
+                    @media (max-width: 768px) {
+                        .card {
+                            transform: none !important;
+                        }
+                        .equipment-item:hover {
+                            transform: translateY(-2px) !important;
+                        }
+                        .btn:hover {
+                            transform: none !important;
+                        }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+        }
+
+        // Enhanced data persistence using IndexedDB fallback
+        class DataStorage {
+            constructor() {
+                this.storage = {};
+            }
+            
+            save(key, data) {
+                try {
+                    this.storage[key] = JSON.parse(JSON.stringify(data));
+                    // Try to use IndexedDB for better persistence
+                    if ('indexedDB' in window) {
+                        this.saveToIndexedDB(key, data);
+                    }
+                } catch (e) {
+                    console.warn('Failed to save data:', e);
+                }
+            }
+            
+            load(key) {
+                return this.storage[key] || null;
+            }
+            
+            async saveToIndexedDB(key, data) {
+                try {
+                    const request = indexedDB.open('GrowkitDB', 1);
+                    
+                    request.onupgradeneeded = (event) => {
+                        const db = event.target.result;
+                        if (!db.objectStoreNames.contains('calculations')) {
+                            db.createObjectStore('calculations', { keyPath: 'id' });
+                        }
+                    };
+                    
+                    request.onsuccess = (event) => {
+                        const db = event.target.result;
+                        const transaction = db.transaction(['calculations'], 'readwrite');
+                        const store = transaction.objectStore('calculations');
+                        store.put({ id: key, data: data, timestamp: Date.now() });
+                    };
+                } catch (e) {
+                    console.warn('IndexedDB not available:', e);
+                }
+            }
+        }
+
+        const dataStorage = new DataStorage();
+
+        // Auto-save form data
+        function autoSaveFormData() {
+            const forms = ['growForm1', 'growForm2'];
+            
+            forms.forEach(formId => {
+                const form = document.getElementById(formId);
+                if (form) {
+                    const inputs = form.querySelectorAll('select, input');
+                    inputs.forEach(input => {
+                        input.addEventListener('change', () => {
+                            const formData = new FormData(form);
+                            const data = Object.fromEntries(formData.entries());
+                            dataStorage.save(formId, data);
+                        });
+                    });
+                }
+            });
+        }
+
+        // Load saved form data
+        function loadSavedFormData() {
+            const forms = ['growForm1', 'growForm2'];
+            
+            forms.forEach(formId => {
+                const savedData = dataStorage.load(formId);
+                if (savedData) {
+                    const form = document.getElementById(formId);
+                    Object.entries(savedData).forEach(([key, value]) => {
+                        const element = form.querySelector(`[name="${key}"]`);
+                        if (element) {
+                            element.value = value;
+                        }
+                    });
+                }
+            });
+        }
+
+        // Enhanced error handling
+        window.addEventListener('error', (event) => {
+            console.error('Application error:', event.error);
+            showNotification('Ein Fehler ist aufgetreten. Bitte lade die Seite neu.', 'error');
+        });
+
+        // Performance monitoring
+        function measurePerformance() {
+            if ('performance' in window) {
+                window.addEventListener('load', () => {
+                    setTimeout(() => {
+                        const perfData = performance.getEntriesByType('navigation')[0];
+                        console.log('Page load time:', perfData.loadEventEnd - perfData.loadEventStart, 'ms');
+                        
+                        if (perfData.loadEventEnd - perfData.loadEventStart > 3000) {
+                            showNotification('Langsame Verbindung erkannt. App wurde für Offline-Nutzung optimiert.');
+                        }
+                    }, 1000);
+                });
+            }
+        }
+
+        // Battery API for mobile optimization
+        function optimizeForBattery() {
+            if ('getBattery' in navigator) {
+                navigator.getBattery().then((battery) => {
+                    if (battery.level < 0.2 && !battery.charging) {
+                        // Reduce animations and 3D rendering on low battery
+                        isAnimating = false;
+                        showNotification('Batterieschonender Modus aktiviert');
+                    }
+                });
+            }
+        }
+
+        // Initialize everything
+        document.addEventListener('DOMContentLoaded', function() {
+            // 3D Scene
+            setTimeout(() => {
+                try {
+                    init3D();
+                    addTouchSupport();
+                } catch (error) {
+                    console.error('3D initialization failed:', error);
+                    // Hide 3D container if it fails
+                    const container = document.getElementById('threejs-container');
+                    if (container) {
+                        container.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;background:#f0f0f0;color:#666;"><i class="fas fa-cube" style="margin-right:10px;"></i>3D-Ansicht nicht verfügbar</div>';
+                    }
+                }
+            }, 100);
+            
+            // Mobile optimizations
+            optimizeForMobile();
+            
+            // Data persistence
+            try {
+                autoSaveFormData();
+                loadSavedFormData();
+            } catch (error) {
+                console.error('Data persistence failed:', error);
+            }
+            
+            // Show welcome message
+            setTimeout(() => {
+                showNotification('Willkommen beim 12stundenlicht Growkit Kalkulator Pro!');
+            }, 1000);
+        });
+
+        // Export functions for testing
+        if (typeof module !== 'undefined' && module.exports) {
+            module.exports = {
+                calculatePPFD,
+                calculateYield,
+                growData
+            };
+        }
+    </script>
+</body>
+</html> class="ppfd-value" id="ppfd30">-</div>
+                        <div>30cm Abstand</div>
+                    </div>
+                    <div class="ppfd-item">
+                        <div class="ppfd-value" id="ppfd60">-</div>
+                        <div>60cm Abstand</div>
+                    </div>
+                    <div class="ppfd-item">
+                        <div
